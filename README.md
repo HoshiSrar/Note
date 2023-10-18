@@ -1,0 +1,3 @@
+# HoshiStar
+
+> An awesome project.
