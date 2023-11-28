@@ -1,0 +1,13 @@
+Redis、Http、WebSocket相关笔记。
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch main
+# Your branch is up to date with 'origin/main'.
+#
+# Changes to be committed:
+#	modified:   _sidebar.md
+#	modified:   docs/d-1Http.md
+#	new file:   docs/d-2WebSocket.md
+#	new file:   "docs/f-1 Redis\344\273\245\345\217\212\346\214\201\344\271\205\345\214\226\346\223\215\344\275\234.md"
+#

@@ -13,7 +13,9 @@
 > * 发送冗长的首部。每次互相发送相同的首部造成的浪费较多。
 > * 可任意选择数据压缩格式。非强制压缩发送。
 >
-> 等等
+> 等等。
+>
+> **PS：Web Socket != Socket！！**
 >
 > ![](https://raw.githubusercontent.com/HoshiSrar/Note_Images/main/img/20231124120509.png)
 >
@@ -49,7 +51,7 @@ WebSocket，即 Web 浏览器与 Web 服务器之间全双工通信协议（意�
 
 ## WebSocket API
 
-JavaScript 可调用 “The WebSocket API”（http://www.w3.org/TR/websockets/，由 W3C 标准制定）内提供的 WebSocket 程序接口，以实现 WebSocket 协议下全双工通 信。 以下为调用 WebSocket API 的一个例子，每 50ms 发送一次数据。
+JavaScript 可调用 “The WebSocket API”（http://www.w3.org/TR/websockets/，由 W3C 标准制定）内提供的 WebSocket 程序接口，以实现 WebSocket 协议下全双工通信。 以下为调用 WebSocket API 的一个例子，每 50ms 发送一次数据。
 
 ~~~javascript
 var socket = new WebSocket('www.localhost:8080/updates');
