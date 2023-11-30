@@ -10,13 +10,13 @@
 
 * Spring 
 
-  * [SpringBoot](./docs/g-1Spring)
+  * [Spring](./docs/g-1Spring)
   * [SpringSecurity](./docs/g-2SpringSecurity.md)
 
 * 前端
 
   * [Vue](./docs/e-2Vue快速入门.md)
-  * [ajax异步请求](./docs/d-1Http)
+  * [ajax异步请求](./docs/e-1Ajax异步请求)
 
 * 计算机网络
 

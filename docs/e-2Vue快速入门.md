@@ -22,7 +22,7 @@ Vue本质是一个对象，根据后端的MVC封层思想划分为MVVM模式，�
 > 3. 后台获取数据（ajax）
 
 
-![image-20230716154752308](C:\Users\56854\AppData\Roaming\Typora\typora-user-images\image-20230716154752308.png)
+![](https://raw.githubusercontent.com/HoshiSrar/Note_Images/main/img/20231130161748.png)
 
 ## **Vue的生命周期分为4部分*：***
 
