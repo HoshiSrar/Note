@@ -578,11 +578,11 @@ AOP（Aspect Oriented Programming，面向切面编程）。较为官方说法�
 >
 > 　　引入中所提到的目标类，也就是要被通知的对象，是我们真正的业务逻辑，它可以在毫不知情的情况下，被我们所织入切面。而目标本身可以专注于业务本身的逻辑。
 >
-> ###   7.代理(proxy)
+>    **7.代理(proxy)**
 >
 > 　　如何实现整套 aop 机制的，都是通过代理。
 >
-> ###   8.织入(weaving)
+>    8**.织入(weaving)**
 >
 > 　　把切面应用到目标对象来创建新的代理对象的过程。有3种方式，spring采用的是运行时。
 
@@ -677,7 +677,7 @@ public class StudentAOP {
 > 4. 方法名称：可以使用*代表全部方法
 > 5. 方法参数：填写对应的参数即可，比如(String, String)，也可以使用*来代表任意一个参数，使用..代表所有参数。
 
-详情可查看 [Spring AOP切点表达式（Pointcut）详解](./Spring AOP切点表达式（Pointcut）详解)
+详情可查看 [Spring AOP切点表达式（Pointcut）详解](https://github.com/HoshiSrar/Note/blob/main/docs/Spring%20AOP%E5%88%87%E7%82%B9%E8%A1%A8%E8%BE%BE%E5%BC%8F%EF%BC%88Pointcut%EF%BC%89%E8%AF%A6%E8%A7%A3.md)
 
 也可以使用其他属性来进行匹配，比如`@annotation`可以用于表示标记了哪些注解的方法被切入，这里我们就只是简单的执行，所以说只需要这样写就可以了：
 
@@ -698,7 +698,7 @@ public class StudentAOP {
 
 ### 使用注解
 
-创建切面,定义切点，切点附近具体位置（这里是由 @Before 决定）
+我们想要使用注解实现 AOP ，同样的我们需要创建一个切面类，切面类中我们需要定义通知、切点，切点附近具体位置（由 @Before 决定）。
 
 ~~~java
 @Aspect
@@ -707,13 +707,13 @@ public class UserAop {
     // 定义切点，匹配规则为 public 的所有返回值类型（包括void），在entity 包下的所有名叫 name 的方法
     // 执行具体位置为 Before，切点之前
     @Before("execution(public * org.example.entity.*.name(..))")
-    public void before(){
+    public void before(){ //本方法就是通知，日志等操作就放在此方法中 
         System.out.println("entity下的所有 叫做name的方法");
     }
 }
 ~~~
 
-ps:需要开启 Spring 的 AOP 支持，这里的所有 Bean 都需要被注册并被扫描。SpringBoot 项目打在启动类上。
+PS：想要使用注解形式的 Spring AOP，我们在配置类上打上开启注解（SpringBoot项目打在启动类上），我们 AOP 所用到所有类都需要注册成 Bean 并被 Spring 扫描到。
 
 ~~~java
 @EnableAspectJAutoProxy
@@ -723,7 +723,7 @@ public class MainConfiguration {
 }
 ~~~
 
-环绕注解稍微特殊一点，且 ProceedingJoinPoint point 只支持环绕模式：
+环绕注解在使用上稍微特殊一点，需要执行 point.proceed(); 一次，其他的 Spring 会自动调用业务代码，环绕需要我们手动调用（返回与业务方法返回值一样）。且 ProceedingJoinPoint point 只支持环绕模式：
 
 ~~~java
 @Around("execution(* org.example.entity.*.name(..))")
@@ -735,7 +735,9 @@ public Object around(ProceedingJoinPoint point) throws Throwable {
 }
 ~~~
 
-我们可以填入使用 JoinPoint pointcut 来获取
+------
+
+我们可以使用 JoinPoint pointcut 来获取原方法中的相应信息，比如 getArgs() 可以获取传入参数。
 
 ~~~java
 @Before("execution(public * org.example.entity.*.name(..))")
@@ -744,7 +746,7 @@ public Object around(ProceedingJoinPoint point) throws Throwable {
     }
 ~~~
 
-JoinPoint 和 ProceedingJoinPoint 中都有大量和切点的相关信息，可以通过它们获取：
+JoinPoint 和 ProceedingJoinPoint 中都有大量和切点相关的信息，可以通过它们获取：
 
 > * 注解中的值，
 >
@@ -754,7 +756,7 @@ JoinPoint 和 ProceedingJoinPoint 中都有大量和切点的相关信息，可�
 >
 >   等等等等。
 
-也可以使用命名绑定模式快速获得原方法的参数：
+当然也有快速获取原方法参数的方法，使用命名绑定模式，我们可以将通知中的参数与原方法参数值绑定，快速获得原方法的参数：
 ~~~java
 // 需增强的业务代码
 public void study(String str){
@@ -770,6 +772,19 @@ public void before(String str){
 
 ~~~
 
+原方法不止一个参数，这里需要注意 execution 配置中，args，argNames，传参的顺序：
+
+~~~Java
+	// 业务代码，双参数
+	public String name(int a,String b){    
+    }
+	// AOP，这里注意args(b,a)中参数填入的顺序要与业务方法中的参数一致，与before()参数也要一致。
+	@Around(value = "execution(public * org.example.entity.*.name(..)) && args(a,b)", argNames = "point,a,b")
+    public Object before(ProceedingJoinPoint point,int a, String b) throws Throwable {
+        return point.proceed(new Object[]{a,b});
+    }
+~~~
+
 除了@Before，还有很多可以直接使用的注解，比如@AfterReturning、@AfterThrowing等，比如@AfterReturning：
 
 ~~~java
@@ -779,17 +794,3 @@ public void afterReturn(Object returnVal){
     System.out.println("返回值是："+returnVal);
 }
 ~~~
-
-多参数的例子：
-
-~~~Java
-	// 业务代码，双参数
-	public String name(int a,String b){    
-    }
-	// AOP，这里注意args(b,a)中参数填入的顺序要与业务方法中的参数一致
-	@Around(value = "execution(public * org.example.entity.*.name(..)) && args(a,b)", argNames = "point,a,b")
-    public Object before(ProceedingJoinPoint point,int a, String b) throws Throwable {
-        return point.proceed(new Object[]{a,b});
-    }
-~~~
-
